@@ -117,7 +117,7 @@ function h() {
     return hand1.length > 0 && hand2.length > 0;
 }
 
-function war( garbage = 0, level = 0) {
+function war( garbo = 0, level = 0) {
     var pool = [hand1.pop(), hand2.pop()];
     var winner = compare(...pool);
 
@@ -129,10 +129,15 @@ function war( garbage = 0, level = 0) {
         winner = h() ? war( 0, level + 1 ) : (hand1.length > 0) ? 1 : 2;
     }
 
-    if (winner === 1 || !hand2.length) {
-        hand1.unshift(...pool);
-    } else if (winner === 2 || !hand1.length) {
-        hand2.unshift(...pool);
+    while(pool.length) {
+        let pick = (Math.random() * pool.length) | 0;
+        let card = pool.splice( pick, 1 )[0]
+
+        if (winner === 1 || !hand2.length) {
+            hand1.unshift( card );
+        } else if (winner === 2 || !hand1.length) {
+            hand2.unshift( card );
+        }
     }
 
     if (level) {
