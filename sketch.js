@@ -78,6 +78,11 @@ var deck = [];
 var hand1 = [];
 var hand2 = [];
 
+const player1 = document.getElementById('player1');
+const player2 = document.getElementById('player2');
+const win = document.getElementById('win');
+const button = document.getElementById('reset');
+
 function deal() {
     var toggle = true;
     while (deck.length) {
@@ -88,38 +93,40 @@ function deal() {
         }
         toggle = !toggle;
     }
+    player1.innerText = hand1.length;
+    player2.innerText = hand2.length;
+
 }
 
 function reset() {
+    console.clear();
     deck = [];
+    hand1 = [];
+    hand2 = [];
     for (let suit = 0; suit <= 3; suit++) {
         for (let rank = 2; rank <= 14; rank++) {
             deck.push(new card(rank, suit));
         }
     }
+    win.innerText = '';
+    button.style.display = 'none';
     deal();
 }
 
-reset();
+function h() {
+    return hand1.length > 0 && hand2.length > 0;
+}
 
-function war(level = 0) {
+function war( garbage = 0, level = 0) {
     var pool = [hand1.pop(), hand2.pop()];
     var winner = compare(...pool);
 
     if (!winner) {
-        if ( hand1.length <= 6 || hand2.length <= 6 ) {
-            debugger;
-            var lower = hand1.length > hand2.length ? hand2 : hand1;
-            for (let i = 0; i < lower.length; i++) {
-                pool.push(lower.pop());
-            }
-        } else {
-            for (let i = 0; i < 3; i++) {
-                pool.push(hand1.pop());
-                pool.push(hand2.pop());
-            }
-            winner = war(level + 1);
+        for (let i = 0; i < 3 && h(); i++) {
+            pool.push(hand1.pop());
+            pool.push(hand2.pop());
         }
+        winner = h() ? war( 0, level + 1 ) : (hand1.length > 0) ? 1 : 2;
     }
 
     if (winner === 1 || !hand2.length) {
@@ -132,20 +139,25 @@ function war(level = 0) {
         console.log(`Level ${level} war`)
         return winner;
     } else {
-        document.getElementById('player1').innerText = `Player 1 has ${hand1.length} cards`;
-        document.getElementById('player2').innerText = `Player 2 has ${hand2.length} cards`;
-        if (hand1.length > 0 && hand2.length > 0) {
-            setTimeout(war, 1000/60);
+        player1.innerText = hand1.length;
+        player2.innerText = hand2.length;
+        if ( h() ) {
+            requestAnimationFrame(war);
         } else {
             // game is over
-            // document.getElementById('player1').style.display = 'none';
-            // document.getElementById('player2').style.display = 'none';
             var winstr = `Player ${hand1.length > 0 ? 1 : 2} wins!`
-            document.getElementById('win').innerText = winstr;
+            win.innerText = winstr;
+            button.style.display = 'block';
             console.log(winstr);
             return;
         }
     }
 }
 
+button.onclick = function() {
+    reset();
+    war();
+}
+
+reset();
 war();
