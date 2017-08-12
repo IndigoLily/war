@@ -1,0 +1,42 @@
+@font-face {
+  font-family: 'dejavu';
+  src: url('fonts/dejavusans.woff') format('woff');
+}
+
+html {
+  font-family: 'dejavu';
+}
+
+#reset {
+  font-size: 120%;
+
+  position: absolute;
+  top: .8em;
+  right: .8em;
+  margin: 0 0 10px 0;
+  padding: .5em 1em;
+
+  cursor: pointer;
+  border-radius: .3em;
+  background-color: #fff;
+  box-shadow: 0 0 .5em rgba(0,0,0,.7);
+  border: 0 solid white;
+}
+#reset:disabled {
+  cursor: not-allowed;
+  box-shadow: 0 0 .5em rgba(0,0,0,.2);
+  background-color: #ddd;
+  color: #888;
+}
+
+.red {
+  color: red;
+}
+
+.black {
+  color: black;
+}
+
+.card {
+  font-size: 30px;
+}
