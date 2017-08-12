@@ -101,7 +101,7 @@ function over() {
   return hand1.length > 0 && hand2.length > 0;
 }
 
-function war( garbo = 0, level = 0) {
+function war( level = 0) {
   var pool = [hand1.pop(), hand2.pop()];
   var winner = compare(...pool);
 
@@ -115,15 +115,15 @@ function war( garbo = 0, level = 0) {
       pool.push(hand1.pop());
       pool.push(hand2.pop());
     }
-    winner = over() ? war( 0, level + 1 ) : (hand1.length > 0) ? 1 : 2;
+    winner = over() ? war( level + 1 ) : (hand1.length > 0) ? 1 : 2;
   }
 
-  turn.innerHTML += ` --> Player ${winner} gets: `;
+  turn.innerHTML += ` → Player ${winner} gets: `;
   pool.forEach(x => turn.innerHTML += x.toHTML());
 
   while(pool.length) {
     let pick = (Math.random() * pool.length) | 0;
-    let card = pool.splice( pick, 1 )[0]
+    let card = pool.splice( pick, 1 )[0];
 
     if (winner === 1 || !hand2.length) {
       hand1.unshift( card );
@@ -139,7 +139,6 @@ function war( garbo = 0, level = 0) {
     player1.innerText = hand1.length;
     player2.innerText = hand2.length;
     if ( over() ) {
-      // requestAnimationFrame(war);
       setTimeout(war, 2000/speed);
     } else {
       // game is over
