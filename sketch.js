@@ -70,6 +70,8 @@ const win = $('#win');
 const button = $('#reset');
 const play = $('#play');
 
+var names = [null, 'Player 1', 'Player 2'];
+
 function deal() {
   var toggle = true;
   while (deck.length) {
@@ -136,16 +138,19 @@ function war(level = 0) {
     winner = cont() ? war(level + 1) : (hand1.length > 0) ? 1 : 2;
   }
 
-  if (turn.$('.result').innerText === '') turn.$('.result').innerText = `Player ${winner} gets: `;
+  if (turn.$('.result').innerText === '') {
+    turn.$('.result').innerHTML = `<span class='${winner}'></span> gets: `;
+    turn.$('.result span').innerText = names[winner];
+  }
   pool.forEach(x => turn.$('.result').innerHTML += x.toHTML());
 
   while(pool.length) {
     let pick = (Math.random() * pool.length) | 0;
     let card = pool.splice( pick, 1 )[0];
 
-    if (winner === 1 || !hand2.length) {
+    if (winner === 1) {
       hand1.unshift( card );
-    } else if (winner === 2 || !hand1.length) {
+    } else if (winner === 2) {
       hand2.unshift( card );
     }
   }
@@ -173,6 +178,16 @@ button.onclick = function() {
 }
 play.onclick = function() {
   war();
+}
+$('#names').onclick = function() {
+  names[1] = prompt('Enter a name for player 1');
+  names[2] = prompt('Enter a name for player 2');
+  $('#name1').innerText = names[1];
+  $('#name2').innerText = names[2];
+  $('#turns').querySelectorAll('.result').forEach(x => {
+    let name = x.$('span');
+    name.innerText = names[name.className];
+  })
 }
 
 reset();
