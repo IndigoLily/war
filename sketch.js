@@ -180,8 +180,8 @@ play.onclick = function() {
   war();
 }
 $('#names').onclick = function() {
-  names[1] = prompt('Enter a name for player 1');
-  names[2] = prompt('Enter a name for player 2');
+  names[1] = prompt('Enter a name for player 1') || 'Player 1';
+  names[2] = prompt('Enter a name for player 2') || 'Player 2';
   $('#name1').innerText = names[1];
   $('#name2').innerText = names[2];
   $('#turns').querySelectorAll('.result').forEach(x => {
