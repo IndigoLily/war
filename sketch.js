@@ -2,6 +2,11 @@ Array.prototype.last = function () {
   return this[this.length - 1];
 }
 
+let $ = x => document.querySelector(x);
+Node.prototype.$ = function(x) {
+  return this.querySelector(x);
+}
+
 function card(rank = 2, suit = 0) {
   // ace is 14;
   // suits go from 0 to 3, in this order: spades, hearts, diamonds, clubs
@@ -59,10 +64,10 @@ var deck = [];
 var hand1 = [];
 var hand2 = [];
 
-const player1 = document.getElementById('player1');
-const player2 = document.getElementById('player2');
-const win = document.getElementById('win');
-const button = document.getElementById('reset');
+const player1 = $('#player1');
+const player2 = $('#player2');
+const win = $('#win');
+const button = $('$reset');
 
 var speed = 1;
 
@@ -93,7 +98,7 @@ function reset() {
   }
   win.innerText = '';
   button.disabled = true;
-  document.getElementById('turns').innerHTML = '';
+  $('#turns').innerHTML = '';
   deal();
 }
 
@@ -101,25 +106,36 @@ function over() {
   return hand1.length > 0 && hand2.length > 0;
 }
 
-function war( level = 0) {
+function war(level = 0) {
   var pool = [hand1.pop(), hand2.pop()];
   var winner = compare(...pool);
 
-  var turn = document.createElement('p');
-  turn.innerHTML = `${pool[0].toHTML()} ${['=','>','<'][winner]} ${pool[1].toHTML()}`;
-  var turns = document.getElementById('turns');
-  turns.insertBefore(turn, document.querySelector('#turns p'));
+  if (level && winner) console.log(`Level ${level} war`);
+
+  var turn;
+  var turnstring = `${pool[0].toHTML()} ${['=','>','<'][winner]} ${pool[1].toHTML()} → `;
+  if (!level) {
+    var newturn = document.createElement('p');
+    turn = $('#turns');
+    turn.insertBefore(newturn, turn.$('p'));
+    let result = '<span class=\'result\'></span>';
+    newturn.innerHTML = turnstring + result;
+  } else {
+    turn = $('#turns p');
+    turn.innerHTML += turnstring;
+    turn.append(turn.$('.result'));
+  }
 
   if (!winner) {
     for (let i = 0; i < 3 && over(); i++) {
       pool.push(hand1.pop());
       pool.push(hand2.pop());
     }
-    winner = over() ? war( level + 1 ) : (hand1.length > 0) ? 1 : 2;
+    winner = over() ? war(level + 1) : (hand1.length > 0) ? 1 : 2;
   }
 
-  turn.innerHTML += ` → Player ${winner} gets: `;
-  pool.forEach(x => turn.innerHTML += x.toHTML());
+  if (turn.$('.result').innerText === '') turn.$('.result').innerText = `Player ${winner} wins: `;
+  pool.forEach(x => turn.$('.result').innerHTML += x.toHTML());
 
   while(pool.length) {
     let pick = (Math.random() * pool.length) | 0;
@@ -133,7 +149,6 @@ function war( level = 0) {
   }
 
   if (level) {
-    console.log(`Level ${level} war`)
     return winner;
   } else {
     player1.innerText = hand1.length;
