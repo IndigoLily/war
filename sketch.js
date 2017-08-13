@@ -68,8 +68,7 @@ const player1 = $('#player1');
 const player2 = $('#player2');
 const win = $('#win');
 const button = $('#reset');
-
-var speed = 1;
+const play = $('#play');
 
 function deal() {
   var toggle = true;
@@ -98,15 +97,18 @@ function reset() {
   }
   win.innerText = '';
   button.disabled = true;
+  play.disabled = false;
   $('#turns').innerHTML = '';
   deal();
 }
 
-function over() {
+function cont() {
   return hand1.length > 0 && hand2.length > 0;
 }
 
 function war(level = 0) {
+  play.disabled = true;
+
   var pool = [hand1.pop(), hand2.pop()];
   var winner = compare(...pool);
 
@@ -127,11 +129,11 @@ function war(level = 0) {
   }
 
   if (!winner) {
-    for (let i = 0; i < 3 && over(); i++) {
+    for (let i = 0; i < 3 && cont(); i++) {
       pool.push(hand1.pop());
       pool.push(hand2.pop());
     }
-    winner = over() ? war(level + 1) : (hand1.length > 0) ? 1 : 2;
+    winner = cont() ? war(level + 1) : (hand1.length > 0) ? 1 : 2;
   }
 
   if (turn.$('.result').innerText === '') turn.$('.result').innerText = `Player ${winner} gets: `;
@@ -153,8 +155,8 @@ function war(level = 0) {
   } else {
     player1.innerText = hand1.length;
     player2.innerText = hand2.length;
-    if ( over() ) {
-      setTimeout(war, 2000/speed);
+    if ( cont() ) {
+      play.disabled = false;
     } else {
       // game is over
       var winstr = `Player ${hand1.length > 0 ? 1 : 2} wins!`
@@ -168,8 +170,9 @@ function war(level = 0) {
 
 button.onclick = function() {
   reset();
+}
+play.onclick = function() {
   war();
 }
 
 reset();
-war();

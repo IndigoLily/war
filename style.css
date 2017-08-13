@@ -7,24 +7,28 @@ html {
   font-family: 'dejavu';
 }
 
-#reset {
+#controls {
   font-size: 120%;
-
-  position: absolute;
+  position: fixed;
   top: .8em;
   right: .8em;
+  text-align: right;
+}
+button {
   margin: 0 0 10px 0;
   padding: .5em 1em;
-
   cursor: pointer;
-  border-radius: .3em;
-  background-color: #fff;
-  box-shadow: 0 0 .5em rgba(0,0,0,.7);
-  border: 0 solid white;
+  background-color: #fafaff;
+  box-shadow: 0 0 .5em rgba(0,0,0,.1);
+  border: 1px solid #000;
+  border-radius: .2em;
+  outline: none;
 }
-#reset:disabled {
+button:active {
+  background-color: #fff;
+}
+button:disabled {
   cursor: not-allowed;
-  box-shadow: 0 0 .5em rgba(0,0,0,.2);
   background-color: #ddd;
   color: #888;
 }
