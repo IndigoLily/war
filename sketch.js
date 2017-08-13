@@ -40,8 +40,8 @@ function card(rank = 2, suit = 0) {
     return String.fromCodePoint(output);
   }
   this.toHTML = function() {
-    var colour = 'card ' + ((this.suit === 1 || this.suit === 2) ? 'red' : 'black');
-    return `<span class='${colour}'>${this.toString()}</span>`;
+    var colour = (this.suit === 1 || this.suit === 2) ? 'red' : 'black';
+    return `<span class='${colour} card'>${this.toString()}</span>`;
   }
 }
 
