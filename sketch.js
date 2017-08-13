@@ -67,7 +67,7 @@ var hand2 = [];
 const player1 = $('#player1');
 const player2 = $('#player2');
 const win = $('#win');
-const button = $('$reset');
+const button = $('#reset');
 
 var speed = 1;
 
