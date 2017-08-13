@@ -134,7 +134,7 @@ function war(level = 0) {
     winner = over() ? war(level + 1) : (hand1.length > 0) ? 1 : 2;
   }
 
-  if (turn.$('.result').innerText === '') turn.$('.result').innerText = `Player ${winner} wins: `;
+  if (turn.$('.result').innerText === '') turn.$('.result').innerText = `Player ${winner} gets: `;
   pool.forEach(x => turn.$('.result').innerHTML += x.toHTML());
 
   while(pool.length) {
