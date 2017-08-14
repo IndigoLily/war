@@ -1,4 +1,4 @@
-Array.prototype.last = function () {
+Array.prototype.last = () => {
   return this[this.length - 1];
 }
 
@@ -13,7 +13,7 @@ function card(rank = 2, suit = 0) {
   this.rank = rank;
   this.suit = suit;
 
-  this.toString = function () {
+  this.toString = () => {
     // convert to unicode card character and return that
     var output = '0x1F0';
 
@@ -44,7 +44,7 @@ function card(rank = 2, suit = 0) {
 
     return String.fromCodePoint(output);
   }
-  this.toHTML = function() {
+  this.toHTML = () => {
     var colour = (this.suit === 1 || this.suit === 2) ? 'red' : 'black';
     return `<span class='${colour} card'>${this.toString()}</span>`;
   }
@@ -127,6 +127,8 @@ function war(level = 0) {
   } else {
     turn = $('#turns p');
     turn.innerHTML += turnstring;
+
+    // move result to the end of the line
     turn.append(turn.$('.result'));
   }
 
@@ -139,7 +141,7 @@ function war(level = 0) {
   }
 
   if (turn.$('.result').innerText === '') {
-    turn.$('.result').innerHTML = `<span class='${winner}'></span> gets: `;
+    turn.$('.result').innerHTML = `<span class='name${winner}'></span> gets: `;
     turn.$('.result span').innerText = names[winner];
   }
   pool.forEach(x => turn.$('.result').innerHTML += x.toHTML());
@@ -164,29 +166,26 @@ function war(level = 0) {
       play.disabled = false;
     } else {
       // game is over
-      var winstr = `Player ${hand1.length > 0 ? 1 : 2} wins!`
-      win.innerText = winstr;
+      win.innerHTML = `<span class='name${winner}'>${names[winner]}</span> wins!`;
       button.disabled = false;
-      console.log(winstr);
       return;
     }
   }
 }
 
-button.onclick = function() {
+button.onclick = () => {
   reset();
 }
-play.onclick = function() {
+play.onclick = () => {
   war();
 }
-$('#names').onclick = function() {
+$('#names').onclick = () => {
   names[1] = prompt('Enter a name for player 1') || 'Player 1';
   names[2] = prompt('Enter a name for player 2') || 'Player 2';
   $('#name1').innerText = names[1];
   $('#name2').innerText = names[2];
-  $('#turns').querySelectorAll('.result').forEach(x => {
-    let name = x.$('span');
-    name.innerText = names[name.className];
+  document.querySelectorAll('.name1, .name2').forEach(x => {
+    x.innerText = names[x.className=='name1'?1:2];
   })
 }
 
